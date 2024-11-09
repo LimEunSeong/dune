@@ -21,6 +21,11 @@ CURSOR cursor = { { 1, 1 }, {1, 1} };
 /* ================= game data =================== */
 char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH] = { 0 };
 
+//변수 추가 정의
+char object_info[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH] = { 0 };
+char system_message[SYS_MESSAGE_HEIGHT][SYS_MESSAGE_WIDTH] = { 0 };
+char command[COMMAND_HEIGHT][COMMAND_WIDTH] = { 0 };
+
 RESOURCE resource = { 
 	.spice = 0,
 	.spice_max = 0,
@@ -42,7 +47,7 @@ int main(void) {
 
 	init();
 	intro();
-	display(resource, map, cursor);
+	display(resource, map, object_info, system_message,command, cursor);
 
 	while (1) {
 		// loop 돌 때마다(즉, TICK==10ms마다) 키 입력 확인
@@ -66,7 +71,7 @@ int main(void) {
 		sample_obj_move();
 
 		// 화면 출력
-		display(resource, map, cursor);
+		display(resource, map, object_info, system_message, command, cursor);
 		Sleep(TICK);
 		sys_clock += 10;
 	}

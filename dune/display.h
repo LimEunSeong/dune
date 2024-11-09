@@ -20,6 +20,9 @@
 void display(
 	RESOURCE resource,
 	char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH],
+	char object_info[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH],
+	char system_message[SYS_MESSAGE_HEIGHT][SYS_MESSAGE_WIDTH],
+	char command[COMMAND_HEIGHT][COMMAND_WIDTH],
 	CURSOR cursor
 );
 

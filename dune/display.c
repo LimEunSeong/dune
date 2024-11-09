@@ -11,7 +11,9 @@
 // 출력할 내용들의 좌상단(topleft) 좌표
 const POSITION resource_pos = { 0, 0 };
 const POSITION map_pos = { 1, 0 };
-
+const POSITION object_info_pos = {1, MAP_WIDTH + 1 };
+const POSITION sys_message_pos = { MAP_HEIGHT+1, 0 };
+const POSITION command_pos = {OBJECT_INFO_HEIGHT +1, SYS_MESSAGE_HEIGHT +1};
 
 char backbuf[MAP_HEIGHT][MAP_WIDTH] = { 0 };
 char frontbuf[MAP_HEIGHT][MAP_WIDTH] = { 0 };
@@ -20,19 +22,25 @@ void project(char src[N_LAYER][MAP_HEIGHT][MAP_WIDTH], char dest[MAP_HEIGHT][MAP
 void display_resource(RESOURCE resource);
 void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]);
 void display_cursor(CURSOR cursor);
+void display_object_info(char object_info[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH]);
+void display_system_message(char system_message[SYS_MESSAGE_HEIGHT][SYS_MESSAGE_WIDTH]);
+void display_command(char command[COMMAND_HEIGHT][COMMAND_WIDTH]);
 
 
 void display(
 	RESOURCE resource,
-	char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH], 
+	char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH],
+	char object_info[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH],
+	char system_message[SYS_MESSAGE_HEIGHT][SYS_MESSAGE_WIDTH],
+	char command[COMMAND_HEIGHT][COMMAND_WIDTH],
 	CURSOR cursor)
 {
 	display_resource(resource);
 	display_map(map);
 	display_cursor(cursor);
-	// display_system_message()
-	// display_object_info()
-	// display_commands()
+	display_object_info(object_info);
+	display_system_message(system_message);
+	display_command(command);
 	// ...
 }
 
@@ -71,7 +79,48 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 		}
 	}
 }
+void display_object_info(char object_info[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH]) {
 
+	for (int i = 0; i < OBJECT_INFO_HEIGHT; i++) {
+		POSITION pos = object_info_pos;
+		pos.row += i;
+		for (int j = 0; j < OBJECT_INFO_WIDTH; j++) {
+			if (frontbuf[i][j] != backbuf[i][j]) {
+				POSITION pos = { i, j };
+				printc(padd(map_pos, pos), backbuf[i][j], COLOR_DEFAULT);
+			}
+			frontbuf[i][j] = backbuf[i][j];
+		}
+	}
+}
+void display_system_message(char system_message[SYS_MESSAGE_HEIGHT][SYS_MESSAGE_WIDTH]) {
+
+	for (int i = 0; i < SYS_MESSAGE_HEIGHT; i++) {
+		POSITION pos = sys_message_pos;
+		pos.row += i;
+		for (int j = 0; j < SYS_MESSAGE_WIDTH; j++) {
+			if (frontbuf[i][j] != backbuf[i][j]) {
+				POSITION pos = { i, j };
+				printc(padd(map_pos, pos), backbuf[i][j], COLOR_DEFAULT);
+			}
+			frontbuf[i][j] = backbuf[i][j];
+		}
+	}
+}
+void display_command(char command[COMMAND_HEIGHT][COMMAND_WIDTH]) {
+
+	for (int i = 0; i < COMMAND_HEIGHT; i++) {
+		POSITION pos = command_pos;
+		pos.row += i;
+		for (int j = 0; j < COMMAND_WIDTH; j++) {
+			if (frontbuf[i][j] != backbuf[i][j]) {
+				POSITION pos = { i, j };
+				printc(padd(map_pos, pos), backbuf[i][j], COLOR_DEFAULT);
+			}
+			frontbuf[i][j] = backbuf[i][j];
+		}
+	}
+}
 // frontbuf[][]에서 커서 위치의 문자를 색만 바꿔서 그대로 다시 출력
 void display_cursor(CURSOR cursor) {
 	POSITION prev = cursor.previous;

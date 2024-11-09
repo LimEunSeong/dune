@@ -14,6 +14,13 @@
 #define MAP_WIDTH	60
 #define MAP_HEIGHT	18
 
+// 상태창, 명령창, 시스템 메시지 정의
+#define OBJECT_INFO_HEIGHT 5
+#define OBJECT_INFO_WIDTH 30
+#define SYS_MESSAGE_HEIGHT 2
+#define SYS_MESSAGE_WIDTH 60
+#define COMMAND_HEIGHT 3
+#define COMMAND_WIDTH 60
 
 /* ================= 위치와 방향 =================== */
 // 맵에서 위치를 나타내는 구조체
