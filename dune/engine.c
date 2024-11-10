@@ -20,7 +20,6 @@ CURSOR cursor = { { 1, 1 }, {1, 1} };
 
 /* ================= game data =================== */
 char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH] = { 0 };
-
 //변수 추가 정의
 char object_info[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH] = { 0 };
 char system_message[SYS_MESSAGE_HEIGHT][SYS_MESSAGE_WIDTH] = { 0 };
@@ -103,6 +102,48 @@ void init(void) {
 			map[0][i][j] = ' ';
 		}
 	}
+
+	// 상태창
+	for (int j = 0; j < OBJECT_INFO_WIDTH; j++) {
+		object_info[0][j] = '#';
+		object_info[OBJECT_INFO_HEIGHT - 1][j] = '#';
+	}
+
+	for (int i = 1; i < OBJECT_INFO_HEIGHT - 1; i++) {
+		object_info[i][0] = '#';
+		object_info[i][OBJECT_INFO_WIDTH - 1] = '#';
+		for (int j = 1; j < OBJECT_INFO_WIDTH - 1; j++) {
+			object_info[i][j] = ' ';
+		}
+	}
+	//시스템 메시지
+	for (int j = 0; j < SYS_MESSAGE_WIDTH; j++) {
+		system_message[0][j] = '#';
+		system_message[SYS_MESSAGE_HEIGHT - 1][j] = '#';
+	}
+
+	for (int i = 1; i < SYS_MESSAGE_HEIGHT - 1; i++) {
+		system_message[i][0] = '#';
+		system_message[i][SYS_MESSAGE_WIDTH - 1] = '#';
+		for (int j = 1; j < SYS_MESSAGE_WIDTH - 1; j++) {
+			system_message[i][j] = ' ';
+		}
+	}
+	//명령창
+	for (int j = 0; j < COMMAND_WIDTH; j++) {
+		command[0][j] = '#';
+		command[COMMAND_HEIGHT - 1][j] = '#';
+	}
+
+	for (int i = 1; i < COMMAND_HEIGHT - 1; i++) {
+		command[i][0] = '#';
+		command[i][COMMAND_WIDTH - 1] = '#';
+		for (int j = 1; j < COMMAND_WIDTH - 1; j++) {
+			command[i][j] = ' ';
+		}
+	}
+
+
 
 	// layer 1(map[1])은 비워 두기(-1로 채움)
 	for (int i = 0; i < MAP_HEIGHT; i++) {
