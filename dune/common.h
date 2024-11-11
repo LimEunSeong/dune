@@ -22,6 +22,8 @@
 #define COMMAND_HEIGHT 5
 #define COMMAND_WIDTH 20
 
+
+
 /* ================= 위치와 방향 =================== */
 // 맵에서 위치를 나타내는 구조체
 typedef struct {

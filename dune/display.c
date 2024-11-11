@@ -99,14 +99,14 @@ void object_info_project(char src[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH], char d
 	}
 }
 void display_object_info(char object_info[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH]) {
-	project(object_info, object_info_backbuf);
+	object_info_project(object_info, object_info_backbuf);
 
 	for (int i = 0; i < OBJECT_INFO_HEIGHT; i++) {
 		//POSITION pos = object_info_pos;
 		//pos.row += i;
 		for (int j = 0; j < OBJECT_INFO_WIDTH; j++) {
 			if (object_info_frontbuf[i][j] != object_info_backbuf[i][j]) {
-				POSITION pos = { i+MAP_HEIGHT, j+MAP_WIDTH };
+				POSITION pos = { i, j+MAP_WIDTH };
 				printc(padd(map_pos, pos), object_info_backbuf[i][j], COLOR_DEFAULT);
 			}
 			object_info_frontbuf[i][j] = object_info_backbuf[i][j];
@@ -123,7 +123,7 @@ void system_message_project(char src[SYS_MESSAGE_HEIGHT][SYS_MESSAGE_WIDTH], cha
 	}
 }
 void display_system_message(char system_message[SYS_MESSAGE_HEIGHT][SYS_MESSAGE_WIDTH]) {
-	project(system_message, sys_message_backbuf);
+	system_message_project(system_message, sys_message_backbuf);
 
 	for (int i = 0; i < SYS_MESSAGE_HEIGHT; i++) {
 		//POSITION pos = sys_message_pos;
@@ -148,14 +148,14 @@ void command_project(char src[COMMAND_HEIGHT][COMMAND_WIDTH], char dest[COMMAND_
 	}
 }
 void display_command(char command[COMMAND_HEIGHT][COMMAND_WIDTH]) {
-	project(command, command_backbuf);
+	command_project(command, command_backbuf);
 
 	for (int i = 0; i < COMMAND_HEIGHT; i++) {
 		//POSITION pos = command_pos;
 		//pos.row += i;
 		for (int j = 0; j < COMMAND_WIDTH; j++) {
 			if (command_frontbuf[i][j] != command_backbuf[i][j]) {
-				POSITION pos = { i, j };
+				POSITION pos = { i+MAP_HEIGHT, j+MAP_WIDTH };
 				printc(padd(map_pos, pos), command_backbuf[i][j], COLOR_DEFAULT);
 			}
 			command_frontbuf[i][j] = command_backbuf[i][j];
