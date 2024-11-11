@@ -81,9 +81,22 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 
 	for (int i = 0; i < MAP_HEIGHT; i++) {
 		for (int j = 0; j < MAP_WIDTH; j++) {
+			char ch = backbuf[i][j];
+			int color = COLOR_DEFAULT; //기본색상
+
+			switch (ch) {
+			case 'S': color = COLOR_SPICE; break; //스파이스
+			case 'H': color = COLOR_PLAYER; break; // 하베스터
+			case 'B': color = COLOR_PLAYER; break; //베이스(플레이어)
+			case 'I': color = COLOR_ENEMY; break; //하베스터(AI)
+			case 'A': color = COLOR_ENEMY; break; //베이스(AI)
+			case 'R': color = COLOR_ROCK; break; //바위
+			case 'W': color = COLOR_WORM; break; //샌드웜
+			default: break;
+			}
 			if (frontbuf[i][j] != backbuf[i][j]) {
-				POSITION pos = {i, j };
-				printc(padd(map_pos, pos), backbuf[i][j], COLOR_DEFAULT);
+				POSITION pos = { i, j };
+				printc(padd(map_pos, pos), backbuf[i][j], color);
 			}
 			frontbuf[i][j] = backbuf[i][j];
 		}
