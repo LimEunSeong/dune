@@ -12,6 +12,12 @@ void cursor_move(DIRECTION dir);
 void sample_obj_move(void);
 POSITION sample_obj_next_position(void);
 
+#define DOUBLE_MOVE_TIME 300 //300 ms 이내에 두번 누르면
+
+//전역 변수 추가
+DIRECTION last_direction = d_stay;//마지막 방향
+clock_t last_move_time = 0; //마지막 이동 시간
+bool can_double_move = false; //추가 이동 가능 여부
 
 /* ================= control =================== */
 int sys_clock = 0;		// system-wide clock(ms)
@@ -213,15 +219,39 @@ void init(void) {
 // (가능하다면) 지정한 방향으로 커서 이동
 void cursor_move(DIRECTION dir) {
 	POSITION curr = cursor.current;
-	POSITION new_pos = pmove(curr, dir);
 
-	// validation check
-	if (1 <= new_pos.row && new_pos.row <= MAP_HEIGHT - 2 && \
-		1 <= new_pos.column && new_pos.column <= MAP_WIDTH - 2) {
+	//현재 시간
+	clock_t current_time = clock();
 
-		cursor.previous = cursor.current;
-		cursor.current = new_pos;
+	//방향이 같고, DOUBLE_MOVE_TIME 이내에 눌렀다면 추가 이동
+	if (dir == last_direction && (current_time - last_move_time) < DOUBLE_MOVE_TIME) {
+		can_double_move = true;//추가 이동 가능
 	}
+	else {
+		can_double_move = false; //추가 이동 불가능
+	}
+	//기본 1칸 이동
+	POSITION new_pos = pmove(curr, dir);
+	// validation check
+	if (1 <= new_pos.row && new_pos.row <= MAP_HEIGHT - 2 &&
+		1 <= new_pos.column && new_pos.column <= MAP_WIDTH - 2) {
+		cursor.previous = cursor.current;
+		cursor.current = new_pos; //정상 이동
+		display_cursor(cursor);
+	}
+	//추가 이동
+	if (can_double_move) {
+		new_pos = pmove(cursor.current, dir);
+		if (1 <= new_pos.row && new_pos.row <= MAP_HEIGHT - 2 &&
+			1 <= new_pos.column && new_pos.column <= MAP_WIDTH - 2) {
+			cursor.previous = cursor.current;
+			cursor.current = new_pos;
+			display_cursor(cursor);
+		}
+	}
+	//현재 방향과 시간 기록
+	last_direction = dir;
+	last_move_time = current_time;//현재 시간을 기록
 }
 
 /* ================= sample object movement =================== */

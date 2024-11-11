@@ -22,14 +22,6 @@
 #define COMMAND_HEIGHT 5
 #define COMMAND_WIDTH 20
 
-//색상 정의
-#define COLOR_SPICE 100 //황토색
-#define COLOR_PLAYER 31 //파란색
-#define COLOR_WORM	111 //주황색
-#define COLOR_ROCK 143 // 회색
-#define COLOR_ENEMY 79 //빨간색
-#define COLOR_PLATE 15 //검은색
-
 
 
 /* ================= 위치와 방향 =================== */

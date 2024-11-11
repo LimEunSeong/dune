@@ -27,7 +27,7 @@ char command_frontbuf[COMMAND_HEIGHT][COMMAND_WIDTH] = { 0 };
 void project(char src[N_LAYER][MAP_HEIGHT][MAP_WIDTH], char dest[MAP_HEIGHT][MAP_WIDTH]);
 void display_resource(RESOURCE resource);
 void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]);
-void display_cursor(CURSOR cursor);
+
 
 void object_info_project(char src[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH], char dest[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH]);
 void display_object_info(char object_info[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH]);
@@ -81,27 +81,29 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 
 	for (int i = 0; i < MAP_HEIGHT; i++) {
 		for (int j = 0; j < MAP_WIDTH; j++) {
-			char ch = backbuf[i][j];
-			int color = COLOR_DEFAULT; //기본색상
-
-			switch (ch) {
-			case 'S': color = COLOR_SPICE; break; //스파이스
-			case 'H': color = COLOR_PLAYER; break; // 하베스터
-			case 'B': color = COLOR_PLAYER; break; //베이스(플레이어)
-			case 'I': color = COLOR_ENEMY; break; //하베스터(AI)
-			case 'A': color = COLOR_ENEMY; break; //베이스(AI)
-			case 'R': color = COLOR_ROCK; break; //바위
-			case 'W': color = COLOR_WORM; break; //샌드웜
-			default: break;
-			}
 			if (frontbuf[i][j] != backbuf[i][j]) {
+				char ch = backbuf[i][j];
+				int color;
 				POSITION pos = { i, j };
+				switch (ch) {
+				case 'S': color = COLOR_SPICE; break; //스파이스
+				case 'H': color = COLOR_PLAYER; break; // 하베스터
+				case 'B': color = COLOR_PLAYER; break; //베이스(플레이어)
+				case 'I': color = COLOR_ENEMY; break; //하베스터(AI)
+				case 'A': color = COLOR_ENEMY; break; //베이스(AI)
+				case 'R': color = COLOR_ROCK; break; //바위
+				case 'W': color = COLOR_WORM; break; //샌드웜
+				case 'P': color = COLOR_PLATE; break; //장판
+				default: color = 112;  break; //기본 색상
+				}
 				printc(padd(map_pos, pos), backbuf[i][j], color);
 			}
-			frontbuf[i][j] = backbuf[i][j];
+
+			frontbuf[i][j] = backbuf[i][j]; //frontbuf 업데이트
 		}
 	}
 }
+
 void object_info_project(char src[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH], char dest[OBJECT_INFO_HEIGHT][OBJECT_INFO_WIDTH]) {
 	for (int i = 0; i < OBJECT_INFO_HEIGHT; i++) {
 		for (int j = 0; j < OBJECT_INFO_WIDTH; j++) {
@@ -180,9 +182,28 @@ void display_cursor(CURSOR cursor) {
 	POSITION prev = cursor.previous;
 	POSITION curr = cursor.current;
 
-	char ch = frontbuf[prev.row][prev.column];
-	printc(padd(map_pos, prev), ch, COLOR_DEFAULT);
+	//이전 위치의 문자와 색상 복원
+	char prev_char = frontbuf[prev.row][prev.column];
+	int prev_color;
+	
+	//이전 위치의 색상 설정
+	switch (prev_char) {
+	case 'S': prev_color = COLOR_SPICE; break; //스파이스
+	case 'H': prev_color = COLOR_PLAYER; break; // 하베스터
+	case 'B': prev_color = COLOR_PLAYER; break; //베이스(플레이어)
+	case 'I': prev_color = COLOR_ENEMY; break; //하베스터(AI)
+	case 'A': prev_color = COLOR_ENEMY; break; //베이스(AI)
+	case 'R': prev_color = COLOR_ROCK; break; //바위
+	case 'W': prev_color = COLOR_WORM; break; //샌드웜
+	case 'P': prev_color = COLOR_PLATE; break; //장판
+	default: prev_color = 112;  break; //기본 색상
+	}
+	//이전 위치를 원래 색상으로 출력
+	printc(padd(map_pos, prev), prev_char, prev_color);
 
-	ch = frontbuf[curr.row][curr.column];
-	printc(padd(map_pos, curr), ch, COLOR_CURSOR);
+	//현재 커서 위치의 문자
+	prev_char = frontbuf[curr.row][curr.column];
+
+	//현재위치의 문자를 그대로 유지하면서 커서 색상으로 출력
+	printc(padd(map_pos, curr), prev_char, COLOR_CURSOR); //커서 색상으로 출력
 }
