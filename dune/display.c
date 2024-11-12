@@ -89,14 +89,14 @@ void display_map(char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH]) {
 				case 'S': color = COLOR_SPICE; break; //스파이스
 				case 'H': color = COLOR_PLAYER; break; // 하베스터
 				case 'B': color = COLOR_PLAYER; break; //베이스(플레이어)
-				case 'I': color = COLOR_ENEMY; break; //하베스터(AI)
-				case 'A': color = COLOR_ENEMY; break; //베이스(AI)
+				case 'I': ch = 'H'; color = COLOR_ENEMY; break; //하베스터(AI)
+				case 'A': ch = 'B'; color = COLOR_ENEMY; break; //베이스(AI)
 				case 'R': color = COLOR_ROCK; break; //바위
 				case 'W': color = COLOR_WORM; break; //샌드웜
 				case 'P': color = COLOR_PLATE; break; //장판
 				default: color = 112;  break; //기본 색상
 				}
-				printc(padd(map_pos, pos), backbuf[i][j], color);
+				printc(padd(map_pos, pos), ch, color);
 			}
 
 			frontbuf[i][j] = backbuf[i][j]; //frontbuf 업데이트
@@ -191,8 +191,8 @@ void display_cursor(CURSOR cursor) {
 	case 'S': prev_color = COLOR_SPICE; break; //스파이스
 	case 'H': prev_color = COLOR_PLAYER; break; // 하베스터
 	case 'B': prev_color = COLOR_PLAYER; break; //베이스(플레이어)
-	case 'I': prev_color = COLOR_ENEMY; break; //하베스터(AI)
-	case 'A': prev_color = COLOR_ENEMY; break; //베이스(AI)
+	case 'I': prev_char = 'H'; prev_color = COLOR_ENEMY; break; //하베스터(AI)
+	case 'A': prev_char = 'B'; prev_color = COLOR_ENEMY; break; //베이스(AI)
 	case 'R': prev_color = COLOR_ROCK; break; //바위
 	case 'W': prev_color = COLOR_WORM; break; //샌드웜
 	case 'P': prev_color = COLOR_PLATE; break; //장판
