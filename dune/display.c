@@ -207,3 +207,23 @@ void display_cursor(CURSOR cursor) {
 	//현재위치의 문자를 그대로 유지하면서 커서 색상으로 출력
 	printc(padd(map_pos, curr), prev_char, COLOR_CURSOR); //커서 색상으로 출력
 }
+
+BUILDING_INFO building_infos[MAX_BUILDINGS] = {
+	{"본진(Base)", "건물 지기 전에 짓기", 0, 50, "H. 하베스터 생산"},
+	{"장판(Plate)", "건물 짓기 전에 깔기", 1, 0, "없음"},
+	{"숙소(Dormitory)", "인구 최대치 증가(10)", 2, 10, "없음"},
+	{"창고(Garage)", "스파이스 보관 최대치 증가(10)", 4, 20, "없음"},
+	{"병영(Barracks)", "보병 생산", 4, 20, "보병 생산: Soldier"},
+	{"은신처(Shelter)", "특수 유닛 생산", 5, 30, "프레멘 생산: Fremen"},
+	{"투기장(Arena)", "투사 생산", 3, 15, "투사 생산: Fighter"},
+	{"공장(Factory)", "특수 유닛 생산", 5, 30, "충전자 생산: Heavy Tank"},
+};
+
+UNIT_INFO unit_infos[MAX_UNITS] = {
+	{"하베스터(Harvester)", 5, 5, 2000, 0, 0, 70, 0, "H: Harvest, M: Move"},
+	{"프레멘(Fremen)", 5, 2, 400, 15, 200, 25, 8, "M: 이동, P: 순찰"},
+	{"보병(Soldier)", 1, 1, 1000, 5, 800, 15, 1, "M: 이동, P: 순찰"},
+	{"투사(Fighter)", 1, 1, 1200, 6, 600, 10, 1, "M: 이동, P: 순찰"},
+	{"중전차(Heavy Tank)", 12, 5, 3000, 40, 4000, 60, 4, "M: 이동, P: 순찰"},
+	{"샌드웜(Sandworm)", 0, 0, 2500, 0, 10000, 0, 0, "무한대"},
+};

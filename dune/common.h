@@ -21,6 +21,8 @@
 #define SYS_MESSAGE_WIDTH 60
 #define COMMAND_HEIGHT 5
 #define COMMAND_WIDTH 20
+#define MAX_BUILDINGS 14
+#define MAX_UNITS 10
 
 
 
@@ -42,6 +44,8 @@ typedef enum {
 	// k_none: 입력된 키가 없음. d_stay(안 움직이는 경우)에 대응
 	k_none = 0, k_up, k_right, k_left, k_down,
 	k_quit,
+	k_esc,
+	k_space,
 	k_undef, // 정의되지 않은 키 입력	
 } KEY;
 
@@ -90,6 +94,28 @@ typedef struct {
 	int population_max;  // 수용 가능한 인구 수
 } RESOURCE;
 
+typedef struct {
+	char name[30];
+	char description[100];
+	int cost;
+	int capacity;
+	char command[30];
+} BUILDING_INFO;
+
+typedef struct {
+	char name[30];
+	int cost;
+	int population;
+	int speed;
+	int attack;
+	int attack_period;
+	int health;
+	int view;
+	char command[30];
+}UNIT_INFO;
+
+extern BUILDING_INFO building_infos[];
+extern UNIT_INFO unit_infos[];
 
 // 대강 만들어 봤음. 기능 추가하면서 각자 수정할 것
 typedef struct {

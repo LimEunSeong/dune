@@ -18,6 +18,7 @@ POSITION sample_obj_next_position(void);
 DIRECTION last_direction = d_stay;//마지막 방향
 clock_t last_move_time = 0; //마지막 이동 시간
 bool can_double_move = false; //추가 이동 가능 여부
+bool clear_object_info = false; // 상태창 비우기 변수 정의
 
 /* ================= control =================== */
 int sys_clock = 0;		// system-wide clock(ms)
@@ -62,6 +63,58 @@ int main(void) {
 		if (is_arrow_key(key)) {
 			cursor_move(ktod(key));
 		}
+		else if (key == k_space) {  // 스페이스바 처리
+			POSITION selected_pos = cursor.current;
+			char selected_char = map[1][selected_pos.row][selected_pos.column]; // 선택된 위치의 문자
+
+			// 선택된 문자가 오브젝트인지 확인
+			int index = -1;
+			if (selected_char == 'H') index = 0; // 하베스터
+			else if (selected_char == 'B') index = 1; // 본진
+			else if (selected_char == 'P') index = 2; // 장판
+			else if (selected_char == 'D') index = 3; // 숙소
+			else if (selected_char == 'G') index = 4; // 창고
+			else if (selected_char == 'R') index = 5; // 병영
+			else if (selected_char == 'S') index = 6; // 은신처
+			else if (selected_char == 'A') index = 7; // 투기장
+			else if (selected_char == 'F') index = 8; // 공장
+			else if (selected_char == 'W') index = 9; // 샌드웜
+			else if (selected_char == 'F') index = 10; // 프레멘
+			else if (selected_char == 'S') index = 11; // 보병
+			else if (selected_char == 'F') index = 12; // 투사
+			else if (selected_char == 'T') index = 13; // 중전차
+
+			// 오브젝트 정보를 상태창에 표시
+			if (index >= 0 && index < MAX_BUILDINGS) {
+				snprintf(object_info[1], OBJECT_INFO_WIDTH, "이름: %s", building_infos[index].name);
+				snprintf(object_info[2], OBJECT_INFO_WIDTH, "설명: %s", building_infos[index].description);
+				snprintf(object_info[3], OBJECT_INFO_WIDTH, "건설비용: %d", building_infos[index].cost);
+				snprintf(object_info[4], OBJECT_INFO_WIDTH, "내구도: %d", building_infos[index].capacity);
+			}
+			else if (index >= 0 && index < 10 + MAX_UNITS) {
+				index -= 10; // 유닛 인덱스 조정
+				// 유닛 정보 출력
+				snprintf(object_info[1], OBJECT_INFO_WIDTH, "이름:%s", unit_infos[index].name);
+				snprintf(object_info[2], OBJECT_INFO_WIDTH, "생산 비용: %d", unit_infos[index].cost);
+				snprintf(object_info[3], OBJECT_INFO_WIDTH, "인구수: %d", unit_infos[index].population);
+				snprintf(object_info[4], OBJECT_INFO_WIDTH, "이동주기: %d", unit_infos[index].speed);
+				snprintf(object_info[5], OBJECT_INFO_WIDTH, "공격력: %d", unit_infos[index].attack);
+				snprintf(object_info[6], OBJECT_INFO_WIDTH, "공격주기: %d", unit_infos[index].attack_period);
+				snprintf(object_info[7], OBJECT_INFO_WIDTH, "체력: %d", unit_infos[index].health);
+				snprintf(object_info[8], OBJECT_INFO_WIDTH, "시야: %d", unit_infos[index].view);
+			}
+			else {
+				// 빈 지형일 경우
+				snprintf(object_info[1], OBJECT_INFO_WIDTH, "지형: 사막지형");
+			}
+		}
+		else if (key == k_esc) {  // ESC 키 처리
+			for (int i = 1; i < OBJECT_INFO_HEIGHT - 1; i++) {
+				for (int j = 1; j < OBJECT_INFO_WIDTH - 1; j++) {
+					object_info[i][j] = ' '; // 상태창 내부 내용을 비우기
+				}
+			}
+		}
 		else {
 			// 방향키 외의 입력
 			switch (key) {
@@ -90,6 +143,7 @@ void intro(void) {
 }
 
 void outro(void) {
+	system("cls");
 	printf("exiting...\n");
 	exit(0);
 }
